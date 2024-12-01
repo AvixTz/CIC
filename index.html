@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחשבון ריבית דריבית</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
+        
+        body { 
+            font-family: 'Rubik', sans-serif;
+        }
+        
+        .main-container {
+            max-width: 60%;
+            margin: 0 auto;
+        }
+
+        .calculate-btn {
+            animation: glowing 3s infinite;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        @keyframes glowing {
+            0% { box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); }
+            50% { box-shadow: 0 4px 25px rgba(37, 99, 235, 0.4); }
+            100% { box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); }
+        }
+
+        .input-label::after {
+            content: '₪';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+
+        .percent-label::after {
+            content: '%';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+
+        .content-box {
+            position: relative;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background: white;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .title-box {
+            position: absolute;
+            top: -1rem;
+            right: 1rem;
+            background-color: rgba(59, 130, 246, 0.1);
+            padding: 0.25rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            z-index: 1;
+        }
+
+        .table-compact {
+            font-size: 0.92rem;
+            line-height: 1.1;
+        }
+
+        .table-compact td,
+        .table-compact th {
+            padding: 0.3rem 0.5rem;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="tel"]::placeholder,
+        input[type="email"]::placeholder,
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"] {
+            text-align: center;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .form-row input {
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+        }
+
+        .table-row-hover:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="main-container mx-auto py-8 px-4">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">מחשבון ריבית דריבית</h1>
+        
+        <div class="grid grid-cols-12 gap-6">
+            <!-- Input Section -->
+            <div class="col-span-12 lg:col-span-6">
+                <div class="content-box">
+                    <div class="title-box">הנתונים שלך</div>
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="relative">
+                                <label class="block mb-1 text-sm font-bold text-gray-700">סכום התחלתי</label>
+                                <div class="relative input-label">
+                                    <input type="number" id="initialAmount" value="100000" min="0" 
+                                           class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+                                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₪</span>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <label class="block mb-1 text-sm font-bold text-gray-700">הפקדה חודשית</label>
+                                <div class="relative input-label">
+                                    <input type="number" id="monthlyDeposit" value="1000" min="0"
+                                           class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+                                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₪</span>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <label class="block mb-1 text-sm font-bold text-gray-700">ריבית שנתית</label>
+                                <div class="relative percent-label">
+                                    <input type="number" id="annualInterest" value="7" min="0" max="100" step="0.1"
+                                           class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+                                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block mb-1 text-sm font-bold text-gray-700">תקופה בשנים</label>
+                                <input type="number" id="years" value="25" min="1" max="100"
+                                       class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <input type="checkbox" id="showFees" class="w-4 h-4">
+                                <label class="font-medium text-sm text-gray-700">עלויות</label>
+                                <span class="text-xs text-gray-500">דמי ניהול ופדיון</span>
+                            </div>
+
+                            <div id="feesSection" class="hidden">
+                                <div class="grid grid-cols-2 gap-3 bg-red-50 p-3 rounded-lg">
+                                    <div class="relative">
+                                        <label class="block mb-1 text-sm font-medium text-gray-700">דמי ניהול מהפקדה</label>
+                                        <div class="relative percent-label">
+                                            <input type="number" id="depositFee" value="0" min="0" max="100" step="0.1"
+                                                   class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+                                        </div>
+                                    </div>
+                                    <div class="relative">
+                                        <label class="block mb-1 text-sm font-medium text-gray-700">דמי ניהול מצבירה</label>
+                                        <div class="relative percent-label">
+                                            <input type="number" id="managementFee" value="0" min="0" max="100" step="0.1"
+                                                   class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+                                        </div>
+                                    </div>
+                                    <div class="col-span-2">
+                                        <label class="block mb-1 text-sm font-medium text-gray-700">פדיון</label>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <div class="relative input-label">
+                                                <input type="number" id="redemptionAmount" placeholder="סכום פדיון" min="0"
+                                                       class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+                                            </div>
+                                            <input type="number" id="redemptionYear" placeholder="שנת פדיון" min="1"
+                                                   class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-center">
+                            <button onclick="calculateResults()" 
+                                    class="calculate-btn px-6 py-2 bg-blue-500 text-white text-base rounded-lg hover:bg-blue-600 transition-colors font-medium">
+                                חשב
+                            </button>
+                            <button onclick="resetCalculator()" 
+                                    class="px-6 py-2 bg-gray-300 text-gray-700 text-base rounded-lg hover:bg-gray-400 transition-colors font-medium ml-2">
+                                איפוס
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="col-span-12 lg:col-span-6">
+                <div class="content-box">
+                    <div class="title-box">תוצאות החישוב</div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <div class="text-gray-600">ערך עתידי</div>
+                            <div id="futureValue" class="text-xl font-bold text-blue-600"></div>
+                        </div>
+
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <div class="text-gray-600">סה״כ רווח</div>
+                            <div id="totalProfit" class="text-xl font-bold text-green-600"></div>
+                        </div>
+
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <div class="text-gray-600">סה״כ הפקדות</div>
+                            <div id="totalDeposits" class="text-xl font-bold text-gray-700"></div>
+                        </div>
+
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <div class="text-gray-600">ריבית שנתית</div>
+                            <div class="flex items-center gap-2">
+                                <span id="nominalRate" class="text-xl font-bold text-gray-700"></span>
+                                <span class="text-orange-500">⇜</span>
+                                <span id="effectiveRate" class="text-xl font-bold text-orange-500"></span>
+                            </div>
+                        </div>
+
+                        <div id="costsContainer" class="hidden">
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <div class="text-gray-600">סה״כ עלויות</div>
+                                <div>
+                                    <div id="totalCosts" class="text-xl font-bold text-red-600"></div>
+                                    <div id="totalTax" class="text-sm text-red-500 text-left"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="content-box mt-8">
+            <div class="title-box">התפתחות ההשקעה</div>
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex gap-3">
+                    <button onclick="toggleChartType('line')" class="px-4 py-2 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-700 text-sm">
+                        גרף קווי
+                    </button>
+                    <button onclick="toggleChartType('bar')" class="px-4 py-2 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-700 text-sm">
+                        גרף עמודות
+                    </button>
+                </div>
+            </div>
+
+            <div class="h-80">
+                <canvas id="investmentChart"></canvas>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button onclick="toggleTable()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm">
+                    הצג טבלת נתונים מפורטת
+                </button>
+            </div>
+
+            <div id="dataTable" class="hidden mt-4 overflow-x-auto">
+                <table class="w-full table-compact">
+                    <thead class="bg-gray-50">
+                        <tr class="text-right">
+                            <th class="font-medium text-gray-600">שנה</th>
+                            <th class="font-medium text-gray-600">סה״כ הפקדות</th>
+                            <th class="font-medium text-gray-600">תשואה שנתית</th>
+                            <th class="font-medium text-gray-600">רווח מצטבר</th>
+                            <th class="font-medium text-gray-600">עלויות מצטברות</th>
+                            <th class="font-medium text-gray-600">יתרה</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Rule of 72 and Required Return -->
+        <div class="content-box mt-6">
+            <div class="title-box">מחשבונים נוספים</div>
+            <div class="grid grid-cols-1 md:grid-cols-10 gap-4 bg-gradient-to-r from-purple-100 to-purple-200 p-4 rounded-lg">
+                <!-- Rule of 72 Calculator (50%) -->
+                <div class="md:col-span-5 bg-white bg-opacity-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-bold mb-2 text-purple-800">כלל ה-72</h3>
+                    <p class="mb-4 text-sm text-purple-700">כלל ה-72 מאפשר לחשב בקירוב תוך כמה שנים יוכפל הכסף שלך בהינתן ריבית מסוימת.</p>
+                    <div class="flex flex-col space-y-2">
+                        <input type="number" id="rule72Interest" placeholder="ריבית שנתית (%)" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                        <input type="number" id="rule72Years" placeholder="שנות השקעה" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                        <button onclick="calculateRule72()" class="bg-purple-600 text-white p-2 rounded font-bold hover:bg-purple-700 transition-all duration-300">
+                            חשב
+                        </button>
+                    </div>
+                    <div id="rule72Result" class="text-xl font-bold text-purple-900 mt-2"></div>
+                    <div id="rule72Calc" class="text-base mt-2 text-purple-800"></div>
+                </div>
+
+                <!-- Required Return Calculator (50%) -->
+                <div class="md:col-span-5 bg-white bg-opacity-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-bold mb-2 text-purple-800">תשואה נדרשת</h3>
+                    <p class="mb-4 text-sm text-purple-700">יש להזין סכום סופי נדרש ו3 נתונים כדי לקבל את החלק החסר.</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" id="targetAmount" placeholder="סכום סופי נדרש (₪)" class="col-span-2 p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                        <input type="number" id="monthlyDeposit2" placeholder="הפקדה חודשית (₪)" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                        <input type="number" id="initialDeposit" placeholder="הפקדה חד פעמית (₪)" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                        <input type="number" id="annualReturn" placeholder="ריבית שנתית (%)" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                        <input type="number" id="investmentPeriod" placeholder="תקופה בשנים" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                        <button onclick="calculateRequiredReturn()" class="col-span-2 bg-purple-600 text-white p-2 rounded font-bold hover:bg-purple-700 transition-all duration-300 mt-2">
+                            חשב
+                        </button>
+                    </div>
+                    <div id="requiredReturnResult" class="text-xl font-bold text-purple-900 mt-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quotes Section -->
+        <div class="content-box mt-6">
+            <div class="title-box">דברי חכמים</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <div class="mb-3 w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-full bg-blue-200"></div>
+                    </div>
+                    <p class="text-base mb-2 font-medium text-gray-800">״ריבית דריבית היא הפלא השמיני של העולם. מי שמבין אותה - מרוויח. מי שלא - משלם.״</p>
+                    <footer class="text-sm text-gray-600 text-center">- אלברט איינשטיין</footer>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <div class="mb-3 w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-full bg-green-200"></div>
+                    </div>
+                    <p class="text-base mb-2 font-medium text-gray-800">״ההבדל בין אדם עשיר לאדם עני הוא הדרך שבה הם משתמשים בזמן שלהם.״</p>
+                    <footer class="text-sm text-gray-600 text-center">- וורן באפט</footer>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <div class="mb-3 w-12 h-12 mx-auto bg-purple-100 rounded-full flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-full bg-purple-200"></div>
+                    </div>
+                    <p class="text-base mb-2 font-medium text-gray-800">״השקעה בידע משלמת את הריבית הטובה ביותר.״</p>
+                    <footer class="text-sm text-gray-600 text-center">- בנג'מין פרנקלין</footer>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <div class="mb-3 w-12 h-12 mx-auto bg-yellow-100 rounded-full flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-full bg-yellow-200"></div>
+                    </div>
+                    <p class="text-base mb-2 font-medium text-gray-800">״הסוד להצלחה הוא להתחיל. הסוד להתחיל הוא לחלק את המשימות המורכבות לצעדים קטנים.״</p>
+                    <footer class="text-sm text-gray-600 text-center">- מארק טוויין</footer>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="content-box mt-6">
+            <div class="title-box">השאירו פרטים</div>
+            <form class="flex flex-wrap justify-center gap-4">
+                <input type="text" placeholder="שם מלא" required
+                    class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm">
+                <input type="tel" placeholder="טלפון" required pattern="[0-9]{10}"
+                    class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm">
+                <input type="email" placeholder="דוא״ל" required
+                    class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm">
+                <button type="submit" 
+                    class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm">
+                    שליחה
+                </button>
+            </form>
+        </div>
+    </div>
+
+<script>
+    let myChart = null;
+    let chartType = 'line';
+    let tableVisible = false;
+
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS', maximumFractionDigits: 0 }).format(amount);
+    }
+
+    function toggleTable() {
+        const table = document.getElementById('dataTable');
+        tableVisible = !tableVisible;
+        table.classList.toggle('hidden');
+        const button = document.querySelector('button[onclick="toggleTable()"]');
+        button.textContent = tableVisible ? 'הסתר טבלת נתונים' : 'הצג טבלת נתונים מפורטת';
+    }
+
+    function toggleChartType(type) {
+        chartType = type;
+        calculateResults();
+    }
+
+    function createChart(years, data) {
+        if (myChart) {
+            myChart.destroy();
+        }
+
+        const ctx = document.getElementById('investmentChart').getContext('2d');
+        const showFees = document.getElementById('showFees').checked;
+        const redemptionYear = parseInt(document.getElementById('redemptionYear').value) || 0;
+
+        let datasets = [];
+        if (chartType === 'bar') {
+            // יצירת מערכי נתונים לגרף העמודות
+            const deposits = data.map(d => d.totalDeposits);
+            const profits = data.map(d => Math.max(0, d.profits));
+            const fees = showFees ? data.map(d => d.costs) : [];
+
+            datasets = [
+                {
+                    label: 'הפקדות מצטברות',
+                    data: deposits,
+                    backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                    borderColor: 'rgb(16, 185, 129)',
+                    stack: 'main'
+                },
+                {
+                    label: 'רווחים',
+                    data: profits,
+                    backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                    borderColor: 'rgb(59, 130, 246)',
+                    stack: 'main'
+                }
+            ];
+
+            if (showFees) {
+                datasets.push({
+                    label: 'עלויות',
+                    data: fees,
+                    backgroundColor: 'rgba(239, 68, 68, 0.7)',
+                    borderColor: 'rgb(239, 68, 68)',
+                    stack: 'main'
+                });
+
+                // הוספת סימון מיוחד לשנת הפדיון
+                if (redemptionYear > 0) {
+                    const redemptionData = data.map((d, i) => 
+                        i === redemptionYear ? d.redemptionCost : null);
+                    
+                    datasets.push({
+                        label: 'פדיון',
+                        data: redemptionData,
+                        backgroundColor: 'rgba(124, 58, 237, 0.7)',
+                        borderColor: 'rgb(124, 58, 237)',
+                        stack: 'main'
+                    });
+                }
+            }
+        } else {
+            // גרף קווי
+            datasets = [
+                {
+                    label: 'סך הכל',
+                    data: data.map(d => d.balance),
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    fill: true
+                },
+                {
+                    label: 'הפקדות מצטברות',
+                    data: data.map(d => d.totalDeposits),
+                    borderColor: '#16a34a',
+                    backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                    fill: true
+                }
+            ];
+
+            if (showFees) {
+                datasets.push({
+                    label: 'עלויות מצטברות',
+                    data: data.map((d, i) => d.costs + (i === redemptionYear ? d.redemptionCost : 0)),
+                    borderColor: '#dc2626',
+                    backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                    fill: true
+                });
+            }
+        }
+
+        const options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    rtl: true,
+                    labels: { 
+                        font: { family: 'Rubik', size: 14 },
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    rtl: true,
+                    titleAlign: 'right',
+                    bodyAlign: 'right',
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += formatCurrency(context.parsed.y);
+                            return label;
+                        },
+                        title: function(tooltipItems) {
+                            const year = tooltipItems[0].label;
+                            if (redemptionYear > 0 && 
+                                parseInt(year.replace('שנה ', '')) === redemptionYear) {
+                                return year + ' (כולל פדיון)';
+                            }
+                            return year;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    stacked: chartType === 'bar',
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: { family: 'Rubik', size: 12 }
+                    }
+                },
+                y: {
+                    stacked: chartType === 'bar',
+                    grid: {
+                        borderDash: [5, 5]
+                    },
+                    ticks: {
+                        callback: value => formatCurrency(value),
+                        font: { family: 'Rubik', size: 12 }
+                    }
+                }
+            }
+        };
+
+        myChart = new Chart(ctx, {
+            type: chartType,
+            data: { 
+                labels: Array.from({ length: years + 1 }, (_, i) => `שנה ${i}`),
+                datasets 
+            },
+            options
+        });
+    }
+
+    function calculateResults() {
+        const initialAmount = parseFloat(document.getElementById('initialAmount').value) || 0;
+        const monthlyDeposit = parseFloat(document.getElementById('monthlyDeposit').value) || 0;
+        const annualInterest = parseFloat(document.getElementById('annualInterest').value) || 0;
+        const years = parseInt(document.getElementById('years').value) || 0;
+        const showFees = document.getElementById('showFees').checked;
+        const depositFee = showFees ? (parseFloat(document.getElementById('depositFee').value) || 0) : 0;
+        const managementFee = showFees ? (parseFloat(document.getElementById('managementFee').value) || 0) : 0;
+        const redemptionAmount = showFees ? (parseFloat(document.getElementById('redemptionAmount').value) || 0) : 0;
+        const redemptionYear = showFees ? (parseInt(document.getElementById('redemptionYear').value) || 0) : 0;
+
+        let yearlyData = [];
+        let balance = initialAmount;
+        let totalDeposits = initialAmount;
+        let totalFees = 0;
+        let totalProfit = 0;
+        let totalTax = 0;
+
+        // שיעור ריבית חודשי
+        const monthlyRate = (annualInterest / 100) / 12;
+
+        // נתונים לשנה 0
+        yearlyData.push({
+            year: 0,
+            balance: initialAmount,
+            totalDeposits: initialAmount,
+            annualReturn: annualInterest,
+            profits: 0,
+            costs: 0,
+            redemptionCost: 0
+        });
+
+        // חישוב לכל שנה
+        for (let year = 1; year <= years; year++) {
+            let yearStartBalance = balance;
+            let yearlyFees = 0;
+            let yearlyDeposits = 0;
+            
+            // חישובים חודשיים
+            for (let month = 1; month <= 12; month++) {
+                // הפקדה חודשית
+                if (monthlyDeposit > 0) {
+                    // חישוב עמלת הפקדה
+                    const depositFeeAmount = monthlyDeposit * (depositFee / 100);
+                    yearlyFees += depositFeeAmount;
+                    
+                    // הפקדה נטו
+                    balance += (monthlyDeposit - depositFeeAmount);
+                    yearlyDeposits += monthlyDeposit;
+                }
+
+                // ריבית חודשית
+                const monthlyInterest = balance * monthlyRate;
+                balance += monthlyInterest;
+                totalProfit += monthlyInterest;
+            }
+
+            totalDeposits += yearlyDeposits;
+
+            // דמי ניהול שנתיים
+            if (showFees) {
+                const annualManagementFee = balance * (managementFee / 100);
+                yearlyFees += annualManagementFee;
+                balance -= annualManagementFee;
+                totalFees += yearlyFees;
+            }
+
+            // טיפול בפדיון
+            let redemptionCost = 0;
+            if (year === redemptionYear && redemptionAmount > 0) {
+                const availableAmount = Math.min(redemptionAmount, balance);
+                const profitPortion = Math.min(availableAmount, totalProfit);
+                
+                // חישוב מס רווחי הון (25% מהרווח)
+                redemptionCost = profitPortion * 0.25;
+                totalTax += redemptionCost;
+                
+                // עדכון יתרות
+                balance -= availableAmount;
+                totalProfit -= profitPortion;
+                totalDeposits -= (availableAmount - profitPortion);
+            }
+
+            yearlyData.push({
+                year,
+                balance: Math.max(0, balance),
+                totalDeposits,
+                annualReturn: annualInterest,
+                profits: Math.max(0, balance - totalDeposits),
+                costs: totalFees,
+                redemptionCost
+            });
+        }
+
+        // עדכון התצוגה
+        document.getElementById('futureValue').textContent = formatCurrency(balance);
+        document.getElementById('totalDeposits').textContent = formatCurrency(totalDeposits);
+        document.getElementById('totalProfit').textContent = formatCurrency(Math.max(0, balance - totalDeposits));
+        
+        // חישוב ריבית אפקטיבית
+        const effectiveRate = years > 0 ? 
+            (Math.pow(balance / initialAmount, 1/years) - 1) * 100 : 0;
+        
+        document.getElementById('nominalRate').textContent = annualInterest.toFixed(1) + '%';
+        document.getElementById('effectiveRate').textContent = effectiveRate.toFixed(1) + '%';
+
+        // עדכון אזור העלויות
+        const costsContainer = document.getElementById('costsContainer');
+        if (showFees) {
+            costsContainer.classList.remove('hidden');
+            const totalCosts = totalFees + totalTax;
+            document.getElementById('totalCosts').textContent = formatCurrency(totalCosts);
+            if (totalTax > 0) {
+                document.getElementById('totalTax').textContent = 
+                    `כולל מס רווחי הון: ${formatCurrency(totalTax)}`;
+            } else {
+                document.getElementById('totalTax').textContent = '';
+            }
+        } else {
+            costsContainer.classList.add('hidden');
+        }
+
+        // עדכון טבלה
+        updateTable(yearlyData);
+
+        // עדכון גרף
+        createChart(years, yearlyData);
+    }
+
+    function updateTable(data) {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+        
+        data.forEach((yearData, index) => {
+            const row = document.createElement('tr');
+            row.className = `${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} table-row-hover`;
+            
+            const isRedemptionYear = yearData.redemptionCost > 0;
+            
+            row.innerHTML = `
+                <td class="p-3 text-right">
+                    ${yearData.year}${isRedemptionYear ? ' *' : ''}
+                </td>
+                <td class="p-3 text-right text-gray-700">
+                    ${formatCurrency(yearData.totalDeposits)}
+                </td>
+                <td class="p-3 text-right text-green-600">
+                    ${yearData.annualReturn.toFixed(1)}%
+                </td>
+                <td class="p-3 text-right text-blue-600">
+                    ${formatCurrency(yearData.profits)}
+                </td>
+                <td class="p-3 text-right text-red-600">
+                    ${formatCurrency(yearData.costs + yearData.redemptionCost)}
+                </td>
+                <td class="p-3 text-right font-medium">
+                    ${formatCurrency(yearData.balance)}
+                </td>
+            `;
+            
+            tbody.appendChild(row);
+        });
+    }
+
+    function calculateRule72() {
+        const interest = parseFloat(document.getElementById("rule72Interest").value);
+        const years = parseFloat(document.getElementById("rule72Years").value);
+
+        if (isNaN(interest) && isNaN(years)) {
+            document.getElementById("rule72Calc").textContent = "נא הזן ריבית שנתית או שנות השקעה";
+            document.getElementById("rule72Result").textContent = "";
+            return;
+        }
+
+        if (!isNaN(interest) && !isNaN(years)) {
+            const futureValue = Math.pow(1 + interest / 100, years);
+            const multiplier = futureValue.toFixed(2);
+            const numericResult = (100000 * futureValue).toFixed(0);
+            document.getElementById("rule72Calc").textContent = `ערך עתידי: פי ${multiplier} מההשקעה המקורית`;
+            document.getElementById("rule72Result").innerHTML = `${formatCurrency(numericResult)} <span class="text-xs align-top">ללא עלויות</span>`;
+        } else if (!isNaN(interest)) {
+            const doublingTime = 72 / interest;
+            document.getElementById("rule72Calc").textContent = `זמן הכפלת ההשקעה: ${doublingTime.toFixed(2)} שנים`;
+            document.getElementById("rule72Result").textContent = "";
+        } else if (!isNaN(years)) {
+            const requiredInterest = 72 / years;
+            document.getElementById("rule72Calc").textContent = `תשואה נדרשת להכפלה: ${requiredInterest.toFixed(2)}%`;
+            document.getElementById("rule72Result").textContent = "";
+        }
+    }
+
+    function calculateRequiredReturn() {
+        const targetAmount = parseFloat(document.getElementById("targetAmount").value);
+        const monthlyDeposit = parseFloat(document.getElementById("monthlyDeposit2").value);
+        const initialDeposit = parseFloat(document.getElementById("initialDeposit").value);
+        const annualReturn = parseFloat(document.getElementById("annualReturn").value);
+        const investmentPeriod = parseFloat(document.getElementById("investmentPeriod").value);
+
+        let result = "";
+        let missingValue = "";
+
+        if (isNaN(targetAmount)) {
+            result = "נא הזן סכום סופי נדרש";
+        } else if ([monthlyDeposit, initialDeposit, annualReturn, investmentPeriod].filter(v => !isNaN(v)).length !== 3) {
+            result = "נא הזן בדיוק שלושה מתוך ארבעת הערכים הנוספים";
+        } else {
+            if (isNaN(monthlyDeposit)) missingValue = "הפקדה חודשית";
+            else if (isNaN(initialDeposit)) missingValue = "הפקדה חד פעמית";
+            else if (isNaN(annualReturn)) missingValue = "ריבית שנתית";
+            else if (isNaN(investmentPeriod)) missingValue = "תקופה בשנים";
+
+            let calculatedValue;
+            if (missingValue === "הפקדה חודשית") {
+                calculatedValue = calculateMonthlyDeposit(targetAmount, initialDeposit, annualReturn, investmentPeriod);
+            } else if (missingValue === "הפקדה חד פעמית") {
+                calculatedValue = calculateInitialDeposit(targetAmount, monthlyDeposit, annualReturn, investmentPeriod);
+            } else if (missingValue === "ריבית שנתית") {
+                calculatedValue = calculateAnnualReturn(targetAmount, monthlyDeposit, initialDeposit, investmentPeriod);
+            } else {
+                calculatedValue = calculateInvestmentPeriod(targetAmount, monthlyDeposit, initialDeposit, annualReturn);
+            }
+
+            result = `${missingValue} נדרשת: ${formatValue(calculatedValue, missingValue)}`;
+        }
+
+        document.getElementById("requiredReturnResult").textContent = result;
+    }
+
+    function calculateMonthlyDeposit(targetAmount, initialDeposit, annualReturn, investmentPeriod) {
+        const r = annualReturn / 100 / 12;
+        const n = investmentPeriod * 12;
+        return (targetAmount - initialDeposit * Math.pow(1 + r, n)) / ((Math.pow(1 + r, n) - 1) / r);
+    }
+
+    function calculateInitialDeposit(targetAmount, monthlyDeposit, annualReturn, investmentPeriod) {
+        const r = annualReturn / 100 / 12;
+        const n = investmentPeriod * 12;
+        return (targetAmount - monthlyDeposit * ((Math.pow(1 + r, n) - 1) / r)) / Math.pow(1 + r, n);
+    }
+
+    function calculateAnnualReturn(targetAmount, monthlyDeposit, initialDeposit, investmentPeriod) {
+        // This requires numerical methods to solve. For simplicity, we'll use an approximation.
+        let low = 0;
+        let high = 100;
+        let mid, calculatedAmount;
+        
+        while (high - low > 0.0001) {
+            mid = (low + high) / 2;
+            calculatedAmount = calculateFutureValue(initialDeposit, monthlyDeposit, mid, investmentPeriod);
+            
+            if (calculatedAmount > targetAmount) {
+                high = mid;
+            } else {
+                low = mid;
+            }
+        }
+        
+        return mid;
+    }
+
+    function calculateInvestmentPeriod(targetAmount, monthlyDeposit, initialDeposit, annualReturn) {
+        // This also requires numerical methods. We'll use a similar approach as above.
+        let low = 0;
+        let high = 100;
+        let mid, calculatedAmount;
+        
+        while (high - low > 0.0001) {
+            mid = (low + high) / 2;
+            calculatedAmount = calculateFutureValue(initialDeposit, monthlyDeposit, annualReturn, mid);
+            
+            if (calculatedAmount > targetAmount) {
+                high = mid;
+            } else {
+                low = mid;
+            }
+        }
+        
+        return mid;
+    }
+
+    function calculateFutureValue(initialDeposit, monthlyDeposit, annualReturn, investmentPeriod) {
+        const r = annualReturn / 100 / 12;
+        const n = investmentPeriod * 12;
+        return initialDeposit * Math.pow(1 + r, n) + monthlyDeposit * ((Math.pow(1 + r, n) - 1) / r);
+    }
+
+    function formatValue(value, type) {
+        if (type === "הפקדה חודשית" || type === "הפקדה חד פעמית") {
+            return formatCurrency(value);
+        } else if (type === "ריבית שנתית") {
+            return value.toFixed(2) + "%";
+        } else {
+            return value.toFixed(2) + " שנים";
+        }
+    }
+
+    function resetCalculator() {
+        document.getElementById('initialAmount').value = '0';
+        document.getElementById('monthlyDeposit').value = '0';
+        document.getElementById('annualInterest').value = '0';
+        document.getElementById('years').value = '0';
+        document.getElementById('showFees').checked = false;
+        document.getElementById('feesSection').classList.add('hidden');
+        document.getElementById('depositFee').value = '0';
+        document.getElementById('managementFee').value = '0';
+        document.getElementById('redemptionAmount').value = '0';
+        document.getElementById('redemptionYear').value = '0';
+        calculateResults();
+    }
+
+    // אירועי מאזינים
+    document.getElementById('showFees').addEventListener('change', function() {
+        document.getElementById('feesSection').classList.toggle('hidden');
+        calculateResults();
+    });
+
+    // וולידציה לטלפון ישראלי
+    document.querySelector('input[type="tel"]').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 10) value = value.slice(0, 10);
+        if (value.length >= 3) {
+            const prefix = value.slice(0, 3);
+            if (!['050','051','052','053','054','055','058','059','02','03','04','08','09'].includes(prefix)) {
+                e.target.setCustomValidity('מספר טלפון לא תקין');
+            } else {
+                e.target.setCustomValidity('');
+            }
+        }
+        e.target.value = value;
+    });
+
+    // חישוב ראשוני
+    calculateResults();
+
+  function updateRequiredReturnInputs() {
+    const inputs = ['targetAmount', 'monthlyDeposit2', 'initialDeposit', 'annualReturn', 'investmentPeriod'];
+    const filledInputs = inputs.filter(id => document.getElementById(id).value !== '');
+    
+    if (filledInputs.length >= 3) {
+      inputs.forEach(id => {
+        if (!filledInputs.includes(id)) {
+          document.getElementById(id).disabled = true;
+        }
+      });
+    } else {
+      inputs.forEach(id => {
+        document.getElementById(id).disabled = false;
+      });
+    }
+  }
+
+  inputs.forEach(id => {
+    document.getElementById(id).addEventListener('input', updateRequiredReturnInputs);
+  });
+</script>
+</body>
+</html>
+
