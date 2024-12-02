@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מחשבון ריבית דריבית</title>
+    <title>מחשבון ריבית דריבית 📈</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -14,11 +14,21 @@
         }
         
         .main-container {
-            max-width: 60%;
+            max-width: 50%;  /* Changed from 60% to be more responsive */
             margin: 0 auto;
         }
+	    @media (max-width: 1200px) {
+        .main-container {
+            max-width: 75%;  /* רוחב גדול יותר במסכים בינוניים */
+        }
+    }
 
-        .calculate-btn {
+    @media (max-width: 768px) {
+        .main-container {
+            max-width: 90%;  /* רוחב כמעט מלא במסכים קטנים */
+        }
+    }
+         .calculate-btn {
             animation: glowing 3s infinite;
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
             transition: all 0.3s ease;
@@ -74,6 +84,55 @@
             z-index: 1;
         }
 
+        /* New Styles for FAQ and Stories */
+        .faq-item, .success-story-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        .faq-header, .story-header {
+            padding: 0.75rem;
+            background-color: #f9fafb;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-content, .story-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: white;
+        }
+
+        .faq-content.active, .story-content.active {
+            max-height: 500px;
+            padding: 0.75rem;
+        }
+
+        .arrow-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .active .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Additional Responsive Styles */
+        @media (max-width: 768px) {
+            .main-container {
+                max-width: 95%;
+            }
+            
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Table Styles */
         .table-compact {
             font-size: 0.92rem;
             line-height: 1.1;
@@ -84,44 +143,41 @@
             padding: 0.3rem 0.5rem;
         }
 
-        input[type="text"]::placeholder,
-        input[type="tel"]::placeholder,
-        input[type="email"]::placeholder,
-        input[type="text"],
-        input[type="tel"],
-        input[type="email"] {
-            text-align: center;
-        }
-
-        .form-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .form-row input {
-            flex: 1;
-            min-width: 200px;
-            max-width: 300px;
-        }
-
         .table-row-hover:hover {
             background-color: rgba(59, 130, 246, 0.1);
-            transition: background-color 0.3s ease;
         }
     </style>
 </head>
 <body class="bg-gray-50">
     <div class="main-container mx-auto py-8 px-4">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">מחשבון ריבית דריבית</h1>
-        
+        <!-- Updated Introduction -->
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-4">מחשבון ריבית דריבית 📈</h1>
+        <div class="max-w-3xl mx-auto mb-6 text-center">
+            <p class="text-lg text-gray-700 mb-4">
+                ריבית דריבית היא הכלי העוצמתי ביותר בעולם הפיננסי. גלו איך חיסכון חכם היום יכול להפוך להון משמעותי בעתיד! 🌱
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+                <div class="bg-blue-50 p-3 rounded-lg">
+                    <p class="font-bold text-blue-800">התחלה מוקדמת 🚀</p>
+                    <p class="text-sm text-gray-600">כל שנה של חיסכון מקרבת ליעד</p>
+                </div>
+                <div class="bg-green-50 p-3 rounded-lg">
+                    <p class="font-bold text-green-800">עקביות 💫</p>
+                    <p class="text-sm text-gray-600">הפקדות קבועות בונות עתיד</p>
+                </div>
+                <div class="bg-purple-50 p-3 rounded-lg">
+                    <p class="font-bold text-purple-800">ראייה ארוכת טווח 🎯</p>
+                    <p class="text-sm text-gray-600">הזמן הוא המשאב החשוב</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Calculator Grid -->
         <div class="grid grid-cols-12 gap-6">
             <!-- Input Section -->
             <div class="col-span-12 lg:col-span-6">
                 <div class="content-box">
-                    <div class="title-box">הנתונים שלך</div>
+                    <div class="title-box">הנתונים שלך 📊</div>
                     <div class="bg-blue-50 rounded-lg p-4">
                         <div class="grid grid-cols-2 gap-3">
                             <div class="relative">
@@ -155,6 +211,7 @@
                             </div>
                         </div>
 
+                        <!-- Fees Section -->
                         <div class="mt-4">
                             <div class="flex items-center gap-2 mb-2">
                                 <input type="checkbox" id="showFees" class="w-4 h-4">
@@ -193,24 +250,24 @@
                             </div>
                         </div>
 
+                        <!-- Calculate Buttons -->
                         <div class="mt-4 text-center">
                             <button onclick="calculateResults()" 
                                     class="calculate-btn px-6 py-2 bg-blue-500 text-white text-base rounded-lg hover:bg-blue-600 transition-colors font-medium">
-                                חשב
+                                חשב 🚀
                             </button>
                             <button onclick="resetCalculator()" 
-                                    class="px-6 py-2 bg-gray-300 text-gray-700 text-base rounded-lg hover:bg-gray-400 transition-colors font-medium ml-2">
-                                איפוס
+                                    class="px-6 py-2 bg-gray-300 text-gray-700 text-base rounded-lg hover:bg-gray-400 transition-colors font-medium mr-2">
+                                איפוס ↺
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Results Section -->
+<!-- Results Section -->
             <div class="col-span-12 lg:col-span-6">
                 <div class="content-box">
-                    <div class="title-box">תוצאות החישוב</div>
+                    <div class="title-box">תוצאות החישוב 💰</div>
                     <div class="space-y-3">
                         <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                             <div class="text-gray-600">ערך עתידי</div>
@@ -252,14 +309,14 @@
 
         <!-- Chart Section -->
         <div class="content-box mt-8">
-            <div class="title-box">התפתחות ההשקעה</div>
+            <div class="title-box">התפתחות ההשקעה 📊</div>
             <div class="flex justify-between items-center mb-4">
                 <div class="flex gap-3">
                     <button onclick="toggleChartType('line')" class="px-4 py-2 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-700 text-sm">
-                        גרף קווי
+                        גרף קווי 📈
                     </button>
                     <button onclick="toggleChartType('bar')" class="px-4 py-2 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-700 text-sm">
-                        גרף עמודות
+                        גרף עמודות 📊
                     </button>
                 </div>
             </div>
@@ -270,7 +327,7 @@
 
             <div class="mt-4 text-center">
                 <button onclick="toggleTable()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm">
-                    הצג טבלת נתונים מפורטת
+                    הצג טבלת נתונים מפורטת 📋
                 </button>
             </div>
 
@@ -291,29 +348,28 @@
             </div>
         </div>
 
-        <!-- Rule of 72 and Required Return -->
+        <!-- Additional Calculators Section -->
         <div class="content-box mt-6">
-            <div class="title-box">מחשבונים נוספים</div>
+            <div class="title-box">מחשבונים נוספים 🧮</div>
             <div class="grid grid-cols-1 md:grid-cols-10 gap-4 bg-gradient-to-r from-purple-100 to-purple-200 p-4 rounded-lg">
-                <!-- Rule of 72 Calculator (50%) -->
+                <!-- Rule of 72 Calculator -->
                 <div class="md:col-span-5 bg-white bg-opacity-50 p-4 rounded-lg">
-                    <h3 class="text-lg font-bold mb-2 text-purple-800">כלל ה-72</h3>
-                    <p class="mb-4 text-sm text-purple-700">כלל ה-72 מאפשר לחשב בקירוב תוך כמה שנים יוכפל הכסף שלך בהינתן ריבית מסוימת.</p>
+                    <h3 class="text-lg font-bold mb-2 text-purple-800">כלל ה-72 ✨</h3>
+                    <p class="mb-4 text-sm text-purple-700">גלו בקלות תוך כמה זמן ההשקעה שלכם תוכפל! פשוט הזינו את הריבית השנתית או את מספר השנים הרצוי </p>
                     <div class="flex flex-col space-y-2">
                         <input type="number" id="rule72Interest" placeholder="ריבית שנתית (%)" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
                         <input type="number" id="rule72Years" placeholder="שנות השקעה" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
                         <button onclick="calculateRule72()" class="bg-purple-600 text-white p-2 rounded font-bold hover:bg-purple-700 transition-all duration-300">
-                            חשב
+                            חשב ✨
                         </button>
                     </div>
                     <div id="rule72Result" class="text-xl font-bold text-purple-900 mt-2"></div>
                     <div id="rule72Calc" class="text-base mt-2 text-purple-800"></div>
                 </div>
-
-                <!-- Required Return Calculator (50%) -->
+<!-- Required Return Calculator -->
                 <div class="md:col-span-5 bg-white bg-opacity-50 p-4 rounded-lg">
-                    <h3 class="text-lg font-bold mb-2 text-purple-800">תשואה נדרשת</h3>
-                    <p class="mb-4 text-sm text-purple-700">יש להזין סכום סופי נדרש ו3 נתונים כדי לקבל את החלק החסר.</p>
+                    <h3 class="text-lg font-bold mb-2 text-purple-800">תשואה נדרשת 🎯</h3>
+                    <p class="mb-4 text-sm text-purple-700">מהי התשואה הנדרשת להשגת היעד הפיננסי שלכם? הזינו את הנתונים וגלו את המסלול להצלחה! </p>
                     <div class="grid grid-cols-2 gap-2">
                         <input type="number" id="targetAmount" placeholder="סכום סופי נדרש (₪)" class="col-span-2 p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
                         <input type="number" id="monthlyDeposit2" placeholder="הפקדה חודשית (₪)" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
@@ -321,45 +377,44 @@
                         <input type="number" id="annualReturn" placeholder="ריבית שנתית (%)" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
                         <input type="number" id="investmentPeriod" placeholder="תקופה בשנים" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
                         <button onclick="calculateRequiredReturn()" class="col-span-2 bg-purple-600 text-white p-2 rounded font-bold hover:bg-purple-700 transition-all duration-300 mt-2">
-                            חשב
+                            חשב 🎯
                         </button>
                     </div>
                     <div id="requiredReturnResult" class="text-xl font-bold text-purple-900 mt-2"></div>
                 </div>
             </div>
         </div>
-
-        <!-- Quotes Section -->
+        <!-- Inspirational Quotes Section -->
         <div class="content-box mt-6">
-            <div class="title-box">דברי חכמים</div>
+            <div class="title-box">דברי חכמים 💭</div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                     <div class="mb-3 w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
-                        <div class="w-8 h-8 rounded-full bg-blue-200"></div>
+                        <span class="text-2xl">💫</span>
                     </div>
                     <p class="text-base mb-2 font-medium text-gray-800">״ריבית דריבית היא הפלא השמיני של העולם. מי שמבין אותה - מרוויח. מי שלא - משלם.״</p>
                     <footer class="text-sm text-gray-600 text-center">- אלברט איינשטיין</footer>
                 </div>
 
-                <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                     <div class="mb-3 w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center">
-                        <div class="w-8 h-8 rounded-full bg-green-200"></div>
+                        <span class="text-2xl">⏳</span>
                     </div>
                     <p class="text-base mb-2 font-medium text-gray-800">״ההבדל בין אדם עשיר לאדם עני הוא הדרך שבה הם משתמשים בזמן שלהם.״</p>
                     <footer class="text-sm text-gray-600 text-center">- וורן באפט</footer>
                 </div>
 
-                <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                     <div class="mb-3 w-12 h-12 mx-auto bg-purple-100 rounded-full flex items-center justify-center">
-                        <div class="w-8 h-8 rounded-full bg-purple-200"></div>
+                        <span class="text-2xl">📚</span>
                     </div>
                     <p class="text-base mb-2 font-medium text-gray-800">״השקעה בידע משלמת את הריבית הטובה ביותר.״</p>
                     <footer class="text-sm text-gray-600 text-center">- בנג'מין פרנקלין</footer>
                 </div>
 
-                <div class="bg-white p-4 rounded-lg shadow-sm">
+                <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
                     <div class="mb-3 w-12 h-12 mx-auto bg-yellow-100 rounded-full flex items-center justify-center">
-                        <div class="w-8 h-8 rounded-full bg-yellow-200"></div>
+                        <span class="text-2xl">🎯</span>
                     </div>
                     <p class="text-base mb-2 font-medium text-gray-800">״הסוד להצלחה הוא להתחיל. הסוד להתחיל הוא לחלק את המשימות המורכבות לצעדים קטנים.״</p>
                     <footer class="text-sm text-gray-600 text-center">- מארק טוויין</footer>
@@ -367,46 +422,201 @@
             </div>
         </div>
 
+        <!-- Success Stories Section -->
+        <div class="content-box mt-6">
+            <div class="title-box">סיפורי הצלחה 🌟</div>
+            <div class="p-4">
+                <!-- משפחה צעירה -->
+                <div class="success-story-item">
+                    <div class="story-header">
+                        <h3 class="font-bold text-lg">👨‍👩‍👧  משפחה צעירה: המסע לעצמאות פיננסית</h3>
+                        <span class="arrow-icon">▼</span>
+                    </div>
+                    <div class="story-content">
+                        <p class="mb-3">"התחלנו עם 500 ₪ בחודש כשנולדה בתנו הראשונה. היום, אחרי 5 שנים, החיסכון עומד על 40,000 ₪ והוא ממשיך לצמוח!"</p>
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <ul class="text-sm space-y-1">
+                                <li>• הפקדה חודשית: 500 ₪</li>
+                                <li>• תשואה שנתית ממוצעת: 7%</li>
+                                <li>• משך החיסכון: 5 שנים</li>
+                                <li>• סך הפקדות: 30,000 ₪</li>
+                                <li>• רווח נקי: 10,000 ₪</li>
+                            </ul>
+                        </div>
+                        <p class="mt-3 text-sm text-emerald-600">💡 המפתח להצלחה: התמדה והשקעה קבועה, גם בסכומים קטנים</p>
+                    </div>
+                </div>
+
+                <!-- סטודנט חכם -->
+                <div class="success-story-item">
+                    <div class="story-header">
+                        <h3 class="font-bold text-lg">📚 סטודנט חכם: בניית עתיד תוך כדי לימודים</h3>
+                        <span class="arrow-icon">▼</span>
+                    </div>
+                    <div class="story-content">
+                        <p class="mb-3">"התחלתי להפריש 200 ₪ בחודש מהמלגה - סכום קטן שנראה לי לא משמעותי. אחרי שנתיים כבר צברתי 6,000 ₪!"</p>
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <ul class="text-sm space-y-1">
+                                <li>• הפקדה חודשית: 200 ₪</li>
+                                <li>• תשואה שנתית ממוצעת: 6%</li>
+                                <li>• משך החיסכון: שנתיים</li>
+                                <li>• סך הפקדות: 4,800 ₪</li>
+                                <li>• רווח נקי: 1,200 ₪</li>
+                            </ul>
+                        </div>
+                        <p class="mt-3 text-sm text-emerald-600">💡 המפתח להצלחה: להתחיל מוקדם, גם בסכומים קטנים</p>
+                    </div>
+                </div>
+
+                <!-- חיסכון לילדים -->
+                <div class="success-story-item">
+                    <div class="story-header">
+                        <h3 class="font-bold text-lg">🎓 חיסכון לילדים: השקעה בדור הבא</h3>
+                        <span class="arrow-icon">▼</span>
+                    </div>
+                    <div class="story-content">
+                        <p class="mb-3">"פתחנו חיסכון של 300 ₪ בחודש לכל ילד מיום הלידה. התחזית לגיל 18: כ-140,000 ₪ לכל ילד!"</p>
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <ul class="text-sm space-y-1">
+                                <li>• הפקדה חודשית: 300 ₪</li>
+                                <li>• תשואה שנתית ממוצעת: 6.5%</li>
+                                <li>• משך החיסכון: 18 שנים</li>
+                                <li>• סך הפקדות צפויות: 64,800 ₪</li>
+                                <li>• רווח צפוי: ~75,200 ₪</li>
+                            </ul>
+                        </div>
+                        <p class="mt-3 text-sm text-emerald-600">💡 המפתח להצלחה: תכנון ארוך טווח והתמדה</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="content-box mt-6">
+            <div class="title-box">שאלות נפוצות 💡</div>
+            <div class="p-4">
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <h3 class="font-bold">מה ההבדל בין ריבית רגילה לריבית דריבית? </h3>
+                        <span class="arrow-icon">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>ריבית דריבית היא כמו כדור שלג פיננסי - הרווחים שלכם מתחילים להרוויח בעצמם! בעוד ריבית רגילה מחושבת רק על הקרן המקורית, ריבית דריבית מחושבת גם על הרווחים המצטברים. למשל, השקעה של 10,000 ₪ בריבית של 10% לשנה תניב בריבית רגילה 1,000 ₪ כל שנה, אבל בריבית דריבית הסכום יגדל משנה לשנה.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <h3 class="font-bold">מה ההבדל בין ריבית נומינלית לאפקטיבית?</h3>
+                        <span class="arrow-icon">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>ריבית נומינלית היא הריבית המוצהרת, בעוד ריבית אפקטיבית מראה את התשואה האמיתית בפועל. למשל, ריבית נומינלית של 6% המחושבת פעמיים בשנה תניב ריבית אפקטיבית של כ-6.09%, כי הריבית מהחציון הראשון מתחילה להרוויח בחציון השני.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <h3 class="font-bold">איך משפיעה האינפלציה על החיסכון? </h3>
+                        <span class="arrow-icon">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>האינפלציה שוחקת את ערך הכסף לאורך זמן. לדוגמה, אם האינפלציה היא 2% וההשקעה שלכם מניבה 5%, התשואה הריאלית (האמיתית) היא 3%. לכן חשוב לבחור אפיקי השקעה שמניבים תשואה גבוהה מהאינפלציה כדי לשמור על ערך הכסף.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <h3 class="font-bold">למה חשוב להתחיל להשקיע מוקדם? </h3>
+                        <span class="arrow-icon">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>הזמן הוא המרכיב החשוב ביותר בנוסחת ריבית דריבית. לדוגמה: השקעה של 1,000 ₪ בחודש למשך 30 שנה בתשואה של 7% תניב כ-1.2 מיליון ₪, בעוד אותה השקעה למשך 20 שנה תניב רק כ-520,000 ₪. ההבדל של 10 שנים מכפיל את התוצאה!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <h3 class="font-bold">איך משפיעים דמי ניהול על החיסכון? </h3>
+                        <span class="arrow-icon">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>דמי ניהול הם כמו "נזילה קטנה" בדלי החיסכון שלכם. הפחתה של 0.5% בדמי הניהול על חיסכון של 1,000 ₪ בחודש למשך 30 שנה יכולה להוביל לחיסכון של עשרות אלפי שקלים. לכן חשוב להשוות דמי ניהול בין מסלולים שונים.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <h3 class="font-bold">מהו כלל ה-72? </h3>
+                        <span class="arrow-icon">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>כלל ה-72 הוא דרך פשוטה לחשב תוך כמה שנים הכסף שלכם יוכפל: מחלקים 72 באחוז התשואה השנתית. למשל, בתשואה של 8% הכסף יוכפל תוך 9 שנים (72/8=9). זהו כלי שימושי להערכה מהירה של פוטנציאל הצמיחה של ההשקעה.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <h3 class="font-bold">איך להתמודד עם תנודתיות בשוק? </h3>
+                        <span class="arrow-icon">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>תנודתיות היא חלק טבעי משוק ההון. המפתח הוא לאמץ אסטרטגיה ארוכת טווח ולהימנע מהחלטות רגשיות. השקעה קבועה לאורך זמן (Dollar Cost Averaging) יכולה לעזור למתןאת ההשפעה של התנודות ולנצל הזדמנויות בשוק.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Contact Form -->
         <div class="content-box mt-6">
-            <div class="title-box">השאירו פרטים</div>
-            <form class="flex flex-wrap justify-center gap-4">
-                <input type="text" placeholder="שם מלא" required
-                    class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm">
-                <input type="tel" placeholder="טלפון" required pattern="[0-9]{10}"
-                    class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm">
-                <input type="email" placeholder="דוא״ל" required
-                    class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm">
-                <button type="submit" 
-                    class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm">
-                    שליחה
-                </button>
-            </form>
+            <div class="title-box">השאירו פרטים לייעוץ אישי 📝</div>
+            <div class="max-w-2xl mx-auto">
+                <p class="text-center mb-4 text-gray-600">רוצים לקבל ייעוץ אישי לתכנון פיננסי חכם? השאירו פרטים ונחזור אליכם! 🤝</p>
+                <form class="flex flex-wrap justify-center gap-4">
+                    <input type="text" placeholder="שם מלא" required
+                        class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <input type="tel" placeholder="טלפון" required pattern="[0-9]{10}"
+                        class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <input type="email" placeholder="דוא״ל" required
+                        class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <button type="submit" 
+                        class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm transition-colors duration-300">
+                        שליחה 📨
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-
 <script>
     let myChart = null;
     let chartType = 'line';
     let tableVisible = false;
 
+    // פונקציה לעיצוב מספרים בפורמט מטבע ישראלי
     function formatCurrency(amount) {
-        return new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS', maximumFractionDigits: 0 }).format(amount);
+        return new Intl.NumberFormat('he-IL', { 
+            style: 'currency', 
+            currency: 'ILS', 
+            maximumFractionDigits: 0 
+        }).format(amount);
     }
 
+    // טוגל טבלת הנתונים
     function toggleTable() {
         const table = document.getElementById('dataTable');
         tableVisible = !tableVisible;
         table.classList.toggle('hidden');
         const button = document.querySelector('button[onclick="toggleTable()"]');
-        button.textContent = tableVisible ? 'הסתר טבלת נתונים' : 'הצג טבלת נתונים מפורטת';
+        button.textContent = tableVisible ? 'הסתר טבלת נתונים 📋' : 'הצג טבלת נתונים מפורטת 📋';
     }
 
+    // החלפת סוג הגרף
     function toggleChartType(type) {
         chartType = type;
         calculateResults();
     }
 
+    // יצירת הגרף
     function createChart(years, data) {
         if (myChart) {
             myChart.destroy();
@@ -418,21 +628,20 @@
 
         let datasets = [];
         if (chartType === 'bar') {
-            // יצירת מערכי נתונים לגרף העמודות
             const deposits = data.map(d => d.totalDeposits);
             const profits = data.map(d => Math.max(0, d.profits));
             const fees = showFees ? data.map(d => d.costs) : [];
 
             datasets = [
                 {
-                    label: 'הפקדות מצטברות',
+                    label: 'הפקדות מצטברות 💰',
                     data: deposits,
                     backgroundColor: 'rgba(16, 185, 129, 0.7)',
                     borderColor: 'rgb(16, 185, 129)',
                     stack: 'main'
                 },
                 {
-                    label: 'רווחים',
+                    label: 'רווחים 📈',
                     data: profits,
                     backgroundColor: 'rgba(59, 130, 246, 0.7)',
                     borderColor: 'rgb(59, 130, 246)',
@@ -442,20 +651,19 @@
 
             if (showFees) {
                 datasets.push({
-                    label: 'עלויות',
+                    label: 'עלויות 📊',
                     data: fees,
                     backgroundColor: 'rgba(239, 68, 68, 0.7)',
                     borderColor: 'rgb(239, 68, 68)',
                     stack: 'main'
                 });
 
-                // הוספת סימון מיוחד לשנת הפדיון
                 if (redemptionYear > 0) {
                     const redemptionData = data.map((d, i) => 
                         i === redemptionYear ? d.redemptionCost : null);
                     
                     datasets.push({
-                        label: 'פדיון',
+                        label: 'פדיון 💸',
                         data: redemptionData,
                         backgroundColor: 'rgba(124, 58, 237, 0.7)',
                         borderColor: 'rgb(124, 58, 237)',
@@ -464,17 +672,16 @@
                 }
             }
         } else {
-            // גרף קווי
             datasets = [
                 {
-                    label: 'סך הכל',
+                    label: 'סך הכל 📊',
                     data: data.map(d => d.balance),
                     borderColor: '#2563eb',
                     backgroundColor: 'rgba(37, 99, 235, 0.1)',
                     fill: true
                 },
                 {
-                    label: 'הפקדות מצטברות',
+                    label: 'הפקדות מצטברות 💰',
                     data: data.map(d => d.totalDeposits),
                     borderColor: '#16a34a',
                     backgroundColor: 'rgba(22, 163, 74, 0.1)',
@@ -484,7 +691,7 @@
 
             if (showFees) {
                 datasets.push({
-                    label: 'עלויות מצטברות',
+                    label: 'עלויות מצטברות 📉',
                     data: data.map((d, i) => d.costs + (i === redemptionYear ? d.redemptionCost : 0)),
                     borderColor: '#dc2626',
                     backgroundColor: 'rgba(220, 38, 38, 0.1)',
@@ -567,6 +774,7 @@
         });
     }
 
+    // חישוב התוצאות
     function calculateResults() {
         const initialAmount = parseFloat(document.getElementById('initialAmount').value) || 0;
         const monthlyDeposit = parseFloat(document.getElementById('monthlyDeposit').value) || 0;
@@ -585,10 +793,8 @@
         let totalProfit = 0;
         let totalTax = 0;
 
-        // שיעור ריבית חודשי
         const monthlyRate = (annualInterest / 100) / 12;
 
-        // נתונים לשנה 0
         yearlyData.push({
             year: 0,
             balance: initialAmount,
@@ -599,26 +805,19 @@
             redemptionCost: 0
         });
 
-        // חישוב לכל שנה
         for (let year = 1; year <= years; year++) {
             let yearStartBalance = balance;
             let yearlyFees = 0;
             let yearlyDeposits = 0;
             
-            // חישובים חודשיים
             for (let month = 1; month <= 12; month++) {
-                // הפקדה חודשית
                 if (monthlyDeposit > 0) {
-                    // חישוב עמלת הפקדה
                     const depositFeeAmount = monthlyDeposit * (depositFee / 100);
                     yearlyFees += depositFeeAmount;
-                    
-                    // הפקדה נטו
                     balance += (monthlyDeposit - depositFeeAmount);
                     yearlyDeposits += monthlyDeposit;
                 }
 
-                // ריבית חודשית
                 const monthlyInterest = balance * monthlyRate;
                 balance += monthlyInterest;
                 totalProfit += monthlyInterest;
@@ -626,7 +825,6 @@
 
             totalDeposits += yearlyDeposits;
 
-            // דמי ניהול שנתיים
             if (showFees) {
                 const annualManagementFee = balance * (managementFee / 100);
                 yearlyFees += annualManagementFee;
@@ -634,17 +832,14 @@
                 totalFees += yearlyFees;
             }
 
-            // טיפול בפדיון
             let redemptionCost = 0;
             if (year === redemptionYear && redemptionAmount > 0) {
                 const availableAmount = Math.min(redemptionAmount, balance);
                 const profitPortion = Math.min(availableAmount, totalProfit);
                 
-                // חישוב מס רווחי הון (25% מהרווח)
                 redemptionCost = profitPortion * 0.25;
                 totalTax += redemptionCost;
                 
-                // עדכון יתרות
                 balance -= availableAmount;
                 totalProfit -= profitPortion;
                 totalDeposits -= (availableAmount - profitPortion);
@@ -666,14 +861,12 @@
         document.getElementById('totalDeposits').textContent = formatCurrency(totalDeposits);
         document.getElementById('totalProfit').textContent = formatCurrency(Math.max(0, balance - totalDeposits));
         
-        // חישוב ריבית אפקטיבית
         const effectiveRate = years > 0 ? 
             (Math.pow(balance / initialAmount, 1/years) - 1) * 100 : 0;
         
         document.getElementById('nominalRate').textContent = annualInterest.toFixed(1) + '%';
         document.getElementById('effectiveRate').textContent = effectiveRate.toFixed(1) + '%';
 
-        // עדכון אזור העלויות
         const costsContainer = document.getElementById('costsContainer');
         if (showFees) {
             costsContainer.classList.remove('hidden');
@@ -689,13 +882,11 @@
             costsContainer.classList.add('hidden');
         }
 
-        // עדכון טבלה
         updateTable(yearlyData);
-
-        // עדכון גרף
         createChart(years, yearlyData);
     }
 
+    // עדכון הטבלה
     function updateTable(data) {
         const tbody = document.getElementById('tableBody');
         tbody.innerHTML = '';
@@ -731,6 +922,7 @@
         });
     }
 
+    // חישוב כלל ה-72
     function calculateRule72() {
         const interest = parseFloat(document.getElementById("rule72Interest").value);
         const years = parseFloat(document.getElementById("rule72Years").value);
@@ -758,6 +950,7 @@
         }
     }
 
+    // חישוב תשואה נדרשת
     function calculateRequiredReturn() {
         const targetAmount = parseFloat(document.getElementById("targetAmount").value);
         const monthlyDeposit = parseFloat(document.getElementById("monthlyDeposit2").value);
@@ -795,6 +988,7 @@
         document.getElementById("requiredReturnResult").textContent = result;
     }
 
+    // פונקציות עזר לחישובים
     function calculateMonthlyDeposit(targetAmount, initialDeposit, annualReturn, investmentPeriod) {
         const r = annualReturn / 100 / 12;
         const n = investmentPeriod * 12;
@@ -808,7 +1002,6 @@
     }
 
     function calculateAnnualReturn(targetAmount, monthlyDeposit, initialDeposit, investmentPeriod) {
-        // This requires numerical methods to solve. For simplicity, we'll use an approximation.
         let low = 0;
         let high = 100;
         let mid, calculatedAmount;
@@ -828,7 +1021,6 @@
     }
 
     function calculateInvestmentPeriod(targetAmount, monthlyDeposit, initialDeposit, annualReturn) {
-        // This also requires numerical methods. We'll use a similar approach as above.
         let low = 0;
         let high = 100;
         let mid, calculatedAmount;
@@ -877,51 +1069,53 @@
         calculateResults();
     }
 
-    // אירועי מאזינים
-    document.getElementById('showFees').addEventListener('change', function() {
-        document.getElementById('feesSection').classList.toggle('hidden');
-        calculateResults();
-    });
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle FAQ and Success Stories Accordions
+        document.querySelectorAll('.faq-header, .story-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const arrow = header.querySelector('.arrow-icon');
+                
+                // Close other items in the same section
+                const parentSection = header.closest('.content-box');
+                parentSection.querySelectorAll('.faq-content, .story-content').forEach(item => {
+                    if (item !== content) {
+                        item.classList.remove('active');
+                        item.previousElementSibling.querySelector('.arrow-icon').style.transform = '';
+                    }
+                });
+                
+                // Toggle current item
+                content.classList.toggle('active');
+                arrow.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : '';
+            });
+        });
 
-    // וולידציה לטלפון ישראלי
-    document.querySelector('input[type="tel"]').addEventListener('input', function(e) {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 10) value = value.slice(0, 10);
-        if (value.length >= 3) {
-            const prefix = value.slice(0, 3);
-            if (!['050','051','052','053','054','055','058','059','02','03','04','08','09'].includes(prefix)) {
-                e.target.setCustomValidity('מספר טלפון לא תקין');
-            } else {
-                e.target.setCustomValidity('');
+        // Show/Hide Fees Section
+        document.getElementById('showFees').addEventListener('change', function() {
+            document.getElementById('feesSection').classList.toggle('hidden');
+            calculateResults();
+        });
+
+        // Phone Number Validation
+        document.querySelector('input[type="tel"]').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 10) value = value.slice(0, 10);
+            if (value.length >= 3) {
+                const prefix = value.slice(0, 3);
+                if (!['050','051','052','053','054','055','058','059','02','03','04','08','09'].includes(prefix)) {
+                    e.target.setCustomValidity('מספר טלפון לא תקין');
+                } else {
+                    e.target.setCustomValidity('');
+                }
             }
-        }
-        e.target.value = value;
+            e.target.value = value;
+        });
     });
 
-    // חישוב ראשוני
+    // Initial calculation
     calculateResults();
-
-  function updateRequiredReturnInputs() {
-    const inputs = ['targetAmount', 'monthlyDeposit2', 'initialDeposit', 'annualReturn', 'investmentPeriod'];
-    const filledInputs = inputs.filter(id => document.getElementById(id).value !== '');
-    
-    if (filledInputs.length >= 3) {
-      inputs.forEach(id => {
-        if (!filledInputs.includes(id)) {
-          document.getElementById(id).disabled = true;
-        }
-      });
-    } else {
-      inputs.forEach(id => {
-        document.getElementById(id).disabled = false;
-      });
-    }
-  }
-
-  inputs.forEach(id => {
-    document.getElementById(id).addEventListener('input', updateRequiredReturnInputs);
-  });
-</script>
+    </script>
 </body>
 </html>
-
