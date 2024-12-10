@@ -1160,36 +1160,37 @@ function handleFormSubmit(event) {
     
     // איסוף הנתונים מהטופס
     const formData = {
-        full_name: document.getElementById('fullName').value,
-        phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value,
+        שם_מלא: document.getElementById('fullName').value,
+        טלפון: document.getElementById('phone').value,
+        אימייל: document.getElementById('email').value,
         form_name: "CIC"
     };
 
     // שליחת הנתונים לוובהוק
+    console.log('Sending data:', formData);
     fetch('https://hook.eu1.make.com/1i3crjqm173nknvqemy9rm40pv1n52v8', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
         },
         body: JSON.stringify(formData)
     })
     .then(response => {
-        if (!response.ok) {
+        if (response.ok) {
+            // הצגת הודעת הצלחה
+            formMessage.className = 'w-full text-center mt-4 text-green-600';
+            formMessage.textContent = '✅ הטופס נשלח בהצלחה! נציג יחזור אליך בהקדם';
+            formMessage.classList.remove('hidden');
+            
+            // איפוס הטופס
+            document.getElementById('contactForm').reset();
+        } else {
             throw new Error('שגיאה בשליחת הטופס');
         }
-        return response.json();
-    })
-    .then(data => {
-        // הצגת הודעת הצלחה
-        formMessage.className = 'w-full text-center mt-4 text-green-600';
-        formMessage.textContent = '✅ הטופס נשלח בהצלחה! נציג יחזור אליך בהקדם';
-        formMessage.classList.remove('hidden');
-        
-        // איפוס הטופס
-        document.getElementById('contactForm').reset();
     })
     .catch(error => {
+        console.error('Error:', error);
         // הצגת הודעת שגיאה
         formMessage.className = 'w-full text-center mt-4 text-red-600';
         formMessage.textContent = '❌ אירעה שגיאה בשליחת הטופס. אנא נסה שנית';
