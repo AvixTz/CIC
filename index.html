@@ -197,7 +197,7 @@
                                 </div>
                             </div>
                             <div class="relative">
-                                <label class="block mb-1 text-sm font-bold text-gray-700">ריבית שנתית</label>
+                                <label class="block mb-1 text-sm font-bold text-gray-700">תשואה שנתית</label>
                                 <div class="relative percent-label">
                                     <input type="number" id="annualInterest" value="7" min="0" max="100" step="0.1"
                                            class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
@@ -285,7 +285,7 @@
                         </div>
 
                         <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                            <div class="text-gray-600">ריבית שנתית</div>
+                            <div class="text-gray-600">תשואה שנתית</div>
                             <div class="flex items-center gap-2">
                                 <span id="nominalRate" class="text-xl font-bold text-gray-700"></span>
                                 <span class="text-orange-500">⇜</span>
@@ -357,8 +357,15 @@
                     <h3 class="text-lg font-bold mb-2 text-purple-800">כלל ה-72 ✨</h3>
                     <p class="mb-4 text-sm text-purple-700">גלו בקלות תוך כמה זמן ההשקעה שלכם תוכפל! פשוט הזינו את הריבית השנתית או את מספר השנים הרצוי </p>
                     <div class="flex flex-col space-y-2">
-                        <input type="number" id="rule72Interest" placeholder="ריבית שנתית (%)" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
-                        <input type="number" id="rule72Years" placeholder="שנות השקעה" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+<div class="relative percent-label">
+    <input type="number" id="rule72Interest" placeholder="תשואה שנתית" min="0" max="100" step="0.1"
+           class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+</div>
+<div class="relative">
+    <input type="number" id="rule72Years" placeholder="שנות השקעה" min="0"
+           class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+</div>
                         <button onclick="calculateRule72()" class="bg-purple-600 text-white p-2 rounded font-bold hover:bg-purple-700 transition-all duration-300">
                             חשב ✨
                         </button>
@@ -371,11 +378,30 @@
                     <h3 class="text-lg font-bold mb-2 text-purple-800">תשואה נדרשת 🎯</h3>
                     <p class="mb-4 text-sm text-purple-700">מהי התשואה הנדרשת להשגת היעד הפיננסי שלכם? הזינו את הנתונים וגלו את המסלול להצלחה! </p>
                     <div class="grid grid-cols-2 gap-2">
-                        <input type="number" id="targetAmount" placeholder="סכום סופי נדרש (₪)" class="col-span-2 p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
-                        <input type="number" id="monthlyDeposit2" placeholder="הפקדה חודשית (₪)" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
-                        <input type="number" id="initialDeposit" placeholder="הפקדה חד פעמית (₪)" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
-                        <input type="number" id="annualReturn" placeholder="ריבית שנתית (%)" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
-                        <input type="number" id="investmentPeriod" placeholder="תקופה בשנים" class="p-2 rounded text-purple-900 border border-purple-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+<div class="relative input-label col-span-2">
+    <input type="number" id="targetAmount" placeholder="סכום סופי נדרש *" min="0" required
+           class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₪</span>
+</div>
+<div class="relative input-label">
+    <input type="number" id="monthlyDeposit2" placeholder="הפקדה חודשית" min="0"
+           class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₪</span>
+</div>
+<div class="relative input-label">
+    <input type="number" id="initialDeposit" placeholder="הפקדה חד פעמית" min="0"
+           class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₪</span>
+</div>
+<div class="relative percent-label">
+    <input type="number" id="annualReturn" placeholder="תשואה שנתית" min="0" max="100" step="0.1"
+           class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+</div>
+<div class="relative">
+    <input type="number" id="investmentPeriod" placeholder="תקופה בשנים" min="1"
+           class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm">
+</div>
                         <button onclick="calculateRequiredReturn()" class="col-span-2 bg-purple-600 text-white p-2 rounded font-bold hover:bg-purple-700 transition-all duration-300 mt-2">
                             חשב 🎯
                         </button>
@@ -569,19 +595,23 @@
 
         <!-- Contact Form -->
         <div class="content-box mt-6">
-            <div class="title-box">השאירו פרטים לייעוץ אישי 📝</div>
+            <div class="title-box">השאירו פרטים לתכנון אישי 📝</div>
             <div class="max-w-2xl mx-auto">
                 <p class="text-center mb-4 text-gray-600">רוצים לקבל ייעוץ אישי לתכנון פיננסי חכם? השאירו פרטים ונחזור אליכם! 🤝</p>
-                <form class="flex flex-wrap justify-center gap-4">
-                    <input type="text" placeholder="שם מלא" required
-                        class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <input type="tel" placeholder="טלפון" required pattern="[0-9]{10}"
-                        class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <input type="email" placeholder="דוא״ל" required
-                        class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <button type="submit" 
-                        class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm transition-colors duration-300">
-                        שליחה 📨
+<form id="contactForm" class="flex flex-wrap justify-center gap-4">
+    <input type="text" id="fullName" name="full_name" placeholder="שם מלא" required
+        class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+    <input type="tel" id="phone" name="phone" placeholder="טלפון" required pattern="[0-9]{10}"
+        class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+    <input type="email" id="email" name="email" placeholder="דוא״ל" required
+        class="flex-1 p-2 border rounded-lg min-w-[150px] max-w-[250px] text-center text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+    <input type="hidden" name="form_name" value="CIC">
+    <button type="submit" id="submitBtn"
+        class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm transition-colors duration-300">
+        שליחה 📨
+    </button>
+    <div id="formMessage" class="w-full text-center hidden"></div>
+</form>
                     </button>
                 </form>
             </div>
@@ -968,7 +998,7 @@
         } else {
             if (isNaN(monthlyDeposit)) missingValue = "הפקדה חודשית";
             else if (isNaN(initialDeposit)) missingValue = "הפקדה חד פעמית";
-            else if (isNaN(annualReturn)) missingValue = "ריבית שנתית";
+            else if (isNaN(annualReturn)) missingValue = "תשואה שנתית";
             else if (isNaN(investmentPeriod)) missingValue = "תקופה בשנים";
 
             let calculatedValue;
@@ -976,7 +1006,7 @@
                 calculatedValue = calculateMonthlyDeposit(targetAmount, initialDeposit, annualReturn, investmentPeriod);
             } else if (missingValue === "הפקדה חד פעמית") {
                 calculatedValue = calculateInitialDeposit(targetAmount, monthlyDeposit, annualReturn, investmentPeriod);
-            } else if (missingValue === "ריבית שנתית") {
+            } else if (missingValue === "תשואה שנתית") {
                 calculatedValue = calculateAnnualReturn(targetAmount, monthlyDeposit, initialDeposit, investmentPeriod);
             } else {
                 calculatedValue = calculateInvestmentPeriod(targetAmount, monthlyDeposit, initialDeposit, annualReturn);
@@ -1048,7 +1078,7 @@
     function formatValue(value, type) {
         if (type === "הפקדה חודשית" || type === "הפקדה חד פעמית") {
             return formatCurrency(value);
-        } else if (type === "ריבית שנתית") {
+        } else if (type === "תשואה שנתית") {
             return value.toFixed(2) + "%";
         } else {
             return value.toFixed(2) + " שנים";
@@ -1112,10 +1142,70 @@
             }
             e.target.value = value;
         });
+    document.getElementById('contactForm').addEventListener('submit', handleFormSubmit);
+
     });
 
     // Initial calculation
     calculateResults();
+function handleFormSubmit(event) {
+    event.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const formMessage = document.getElementById('formMessage');
+    
+    // שינוי כפתור השליחה למצב טעינה
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'שולח... ⏳';
+    
+    // איסוף הנתונים מהטופס
+    const formData = {
+        full_name: document.getElementById('fullName').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        form_name: "CIC"
+    };
+
+    // שליחת הנתונים לוובהוק
+    fetch('https://hook.eu1.make.com/1i3crjqm173nknvqemy9rm40pv1n52v8', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('שגיאה בשליחת הטופס');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // הצגת הודעת הצלחה
+        formMessage.className = 'w-full text-center mt-4 text-green-600';
+        formMessage.textContent = '✅ הטופס נשלח בהצלחה! נציג יחזור אליך בהקדם';
+        formMessage.classList.remove('hidden');
+        
+        // איפוס הטופס
+        document.getElementById('contactForm').reset();
+    })
+    .catch(error => {
+        // הצגת הודעת שגיאה
+        formMessage.className = 'w-full text-center mt-4 text-red-600';
+        formMessage.textContent = '❌ אירעה שגיאה בשליחת הטופס. אנא נסה שנית';
+        formMessage.classList.remove('hidden');
+    })
+    .finally(() => {
+        // החזרת כפתור השליחה למצב רגיל
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'שליחה 📨';
+        
+        // הסתרת ההודעה אחרי 5 שניות
+        setTimeout(() => {
+            formMessage.classList.add('hidden');
+        }, 5000);
+    });
+}
     </script>
 </body>
 </html>
